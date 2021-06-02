@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -138,8 +140,18 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        startActivity(new Intent(getApplicationContext(), SurveysActivity.class));
-                        Log.d("raspunsasd", response.toString());
+                        try {
+                            String token = response.getString("token");
+                            SharedPreferences preferences = getSharedPreferences("token", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("userToken", token);
+                            editor.apply();
+                            startActivity(new Intent(getApplicationContext(), SurveysActivity.class));
+                            Log.d("raspunsasd", response.toString());
+
+                        } catch (JSONException e) {
+                            Log.d("raspunsasd", e.toString());
+                        }
                     }
                 }, new Response.ErrorListener() {
 

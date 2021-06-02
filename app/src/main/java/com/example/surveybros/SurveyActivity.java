@@ -22,8 +22,8 @@ import java.util.List;
 public class SurveyActivity extends AppCompatActivity {
 
     TextView title;
-    ArrayList<Question> questions = new ArrayList<Question>();
     ListView list;
+    ArrayList<String> questions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +38,16 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     public void readQuestions(){
-        questions.add(new Question("Ce fai?", "text"));
-        questions.add(new Question("Cati ani ai0?", "number"));
-        questions.add(new Question("Cand te ai nascut?", "date"));
 
         SurveyActivity.MyAdapter adapter = new MyAdapter(SurveyActivity.this, questions);
         list.setAdapter(adapter);
     }
 
-    class MyAdapter extends ArrayAdapter<Question> {
+    class MyAdapter extends ArrayAdapter<String> {
         Context context;
-        List<Question> rQuestion;
+        List<String> rQuestion;
 
-        MyAdapter (Context c, ArrayList<Question> question){
+        MyAdapter (Context c, ArrayList<String> question){
             super(c, R.layout.answer, R.id.question, question);
             this.context=c;
             this.rQuestion=question;
@@ -64,21 +61,7 @@ public class SurveyActivity extends AppCompatActivity {
             TextView myQuestion = question.findViewById(R.id.question);
             EditText myAnswer = question.findViewById(R.id.answer);
 
-            myQuestion.setText(rQuestion.get(position).getQuestion());
-
-            if(rQuestion.get(position).getType()=="text"){
-                myAnswer.setHint("text");
-                myAnswer.setInputType(InputType.TYPE_CLASS_TEXT);
-            }
-            else if(rQuestion.get(position).getType()=="number"){
-                myAnswer.setHint("number");
-                myAnswer.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-            }
-            else if(rQuestion.get(position).getType()=="date"){
-                myAnswer.setHint("date");
-                myAnswer.setInputType(InputType.TYPE_CLASS_DATETIME);
-            }
+            myQuestion.setText(rQuestion.get(position));
             return question;
         }
     }
