@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        String url ="localhost:4000/authenticate";
+        String url ="http://10.0.2.2:4000/accounts/authenticate";
         Map<String, String> params = new HashMap<String, String>();
         params.put("email", email);
         params.put("pass", password);

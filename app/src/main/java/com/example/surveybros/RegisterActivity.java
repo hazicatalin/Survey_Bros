@@ -105,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        String url ="http://localhost:4000/register";
+        String url ="http://10.0.2.2:4000/accounts/register";
         Map<String, String> params = new HashMap<String, String>();
         params.put("email", email);
         params.put("pass", password);
