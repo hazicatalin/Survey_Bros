@@ -8,8 +8,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -31,8 +35,11 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText etName, etLastName, etEmail, etPassword, etConfPassword;
+    TextView textView;
     private Button register;
+    Spinner spinner;
     RequestQueue queue;
+    int subscriptionType=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +57,46 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword= findViewById(R.id.password_register);
         etConfPassword = findViewById(R.id.password_confirm_register);
         register = findViewById(R.id.register);
+        spinner = findViewById(R.id.spinner);
+        textView = findViewById(R.id.txt);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(RegisterActivity.this, R.array.accountType, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String text = parent.getItemAtPosition(position).toString();
+                if(text.equals("Free")){
+                    textView.setText("2 weeks lifetime, no price, expensive per week extension, low completion count");
+                    subscriptionType=1;
+                }
+                if(text.equals("Standard")){
+                    textView.setText("2 weeks lifetime, 0.1 per 1000 completions, 0.05 extension per 1000 completions, 10k completion max");
+                    subscriptionType=2;
+                }
+                if(text.equals("Premium")){
+                    textView.setText("3 weeks, 0.11 per 1000 comp, 0.045 ext per 1000 comp, 15k compl total");
+                    subscriptionType=3;
+                }
+                if(text.equals("Enterprise")){
+                    textView.setText("4 weeks, 0.12 per 1000, 0.04 ext per 1000, 50k compl total");
+                    subscriptionType=4;
+                }
+                if(text.equals("Professional")){
+                    textView.setText("8 weeks, 0.15 per 1000, 0.03 ext per 1000, no compl limit");
+                    subscriptionType=5;
+                }
 
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        if(spinner.getSelectedItem().toString().equals("Free")){
+            textView.setText("2 weeks lifetime, no price, expensive per week extension, low completion count");
+        }
         Button register = (Button) findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +161,11 @@ public class RegisterActivity extends AppCompatActivity {
         params.put("last_name", lastName);
 
         JSONObject json =  new JSONObject(params);
+        try{
+            json.put("subscription_type", subscriptionType);
+        } catch (JSONException e) {
+            Log.d("raspunsasd", e.toString());
+        }
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 url, json,
                 new Response.Listener<JSONObject>() {

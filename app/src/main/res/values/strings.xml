@@ -2,7 +2,13 @@
     <string name="app_name">SurveyBros</string>
     <string-array name="answerType">
         <item>text</item>
-        <item>number</item>
-        <item>date</item>
+        <item>yes/no</item>
+    </string-array>
+    <string-array name="accountType">
+        <item>Free</item>
+        <item>Standard</item>
+        <item>Premium</item>
+        <item>Enterprise</item>
+        <item>Professional</item>
     </string-array>
 </resources>

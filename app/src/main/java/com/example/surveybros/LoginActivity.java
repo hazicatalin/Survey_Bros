@@ -141,10 +141,11 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            String token = response.getString("token");
-                            SharedPreferences preferences = getSharedPreferences("token", MODE_PRIVATE);
+                            String token = response.getString("token"), id = response.getString("ID");
+                            SharedPreferences preferences = getSharedPreferences("info", MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("userToken", token);
+                            editor.putString("token", token);
+                            editor.putString("id", id);
                             editor.apply();
                             startActivity(new Intent(getApplicationContext(), SurveysActivity.class));
                             Log.d("raspunsasd", response.toString());
